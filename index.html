@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #0a0a0a;
+            color: #00ff00;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .terminal {
+            height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .terminal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 0, 0.03) 2px,
+                    rgba(0, 255, 0, 0.03) 4px
+                );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .header {
+            color: #00ff00;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .ascii-art {
+            color: #00ff00;
+            font-size: 8px;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .output {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .line {
+            margin-bottom: 5px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .prompt {
+            color: #00ff00;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .command {
+            color: #ffffff;
+        }
+
+        .input-line {
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        #terminal-input {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+            flex: 1;
+            padding: 0;
+        }
+
+        .cursor {
+            background-color: #00ff00;
+            color: #0a0a0a;
+            animation: blink 1s infinite;
+            padding: 0 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .info { color: #00aaff; }
+        .warning { color: #ffaa00; }
+
+        .skill-bar {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .skill-name {
+            width: 150px;
+            color: #00aaff;
+        }
+
+        .skill-progress {
+            flex: 1;
+            max-width: 200px;
+            background: #333;
+            height: 20px;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00, #00aa00);
+            transition: width 1s ease-in-out;
+        }
+
+        .skill-percent {
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .terminal {
+                padding: 10px;
+                font-size: 12px;
+            }
+            
+            .ascii-art {
+                font-size: 6px;
+            }
+            
+            .skill-name {
+                width: 100px;
+            }
+            
+            .skill-progress {
+                max-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="header">
+            <div class="ascii-art">
+ _____                  _             _   ____            _    __       _ _       
+|_   _|__ _ __ _ __ ___ (_)_ __   __ _| | |  _ \ ___  _ __| |_ / _| ___ | (_) ___  
+  | |/ _ \ '__| '_ ` _ \| | '_ \ / _` | | | |_) / _ \| '__| __| |_ / _ \| | |/ _ \ 
+  | |  __/ |  | | | | | | | | | | (_| | | |  __/ (_) | |  | |_|  _| (_) | | | (_) |
+  |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|_| |_|   \___/|_|   \__|_|  \___/|_|_|\___/
+            </div>
+            <div>Welcome to my interactive portfolio terminal</div>
+            <div>Type 'help' to get started</div>
+        </div>
+
+        <div id="output" class="output"></div>
+
+        <div class="input-line">
+            <span class="prompt">visitor@portfolio:~$</span>
+            <input type="text" id="terminal-input" autocomplete="off" autofocus>
+            <span class="cursor" id="cursor">_</span>
+        </div>
+    </div>
+
+    <script>
+        const output = document.getElementById('output');
+        const input = document.getElementById('terminal-input');
+        const cursor = document.getElementById('cursor');
+
+        // Portfolio data - customize this section
+        const portfolio = {
+            name: "Your Name",
+            title: "Full Stack Developer",
+            email: "your.email@example.com",
+            github: "https://github.com/yourusername",
+            linkedin: "https://linkedin.com/in/yourprofile",
+            skills: {
+                "JavaScript": 90,
+                "Python": 85,
+                "React": 88,
+                "Node.js": 82,
+                "HTML/CSS": 95,
+                "Git": 87,
+                "SQL": 80,
+                "Docker": 75
+            },
+            projects: [
+                {
+                    name: "Project One",
+                    description: "A full-stack web application built with React and Node.js",
+                    tech: "React, Node.js, MongoDB",
+                    url: "https://github.com/yourusername/project-one"
+                },
+                {
+                    name: "Project Two", 
+                    description: "Mobile-first responsive website with modern UI/UX",
+                    tech: "HTML, CSS, JavaScript",
+                    url: "https://github.com/yourusername/project-two"
+                },
+                {
+                    name: "Project Three",
+                    description: "RESTful API with authentication and database integration",
+                    tech: "Python, Flask, PostgreSQL",
+                    url: "https://github.com/yourusername/project-three"
+                }
+            ],
+            experience: [
+                {
+                    role: "Software Developer",
+                    company: "Tech Company Inc.",
+                    period: "2022 - Present",
+                    description: "Developing web applications and maintaining backend services"
+                },
+                {
+                    role: "Junior Developer",
+                    company: "Startup XYZ",
+                    period: "2021 - 2022",
+                    description: "Built responsive websites and collaborated on mobile apps"
+                }
+            ]
+        };
+
+        const commands = {
+            help: () => {
+                return `
+<span class="info">Available commands:</span>
+
+  <span class="success">about</span>      - Learn more about me
+  <span class="success">skills</span>     - View my technical skills  
+  <span class="success">projects</span>   - See my recent projects
+  <span class="success">experience</span> - View my work experience
+  <span class="success">contact</span>    - Get my contact information
+  <span class="success">resume</span>     - Download my resume
+  <span class="success">clear</span>      - Clear the terminal
+  <span class="success">help</span>       - Show this help message
+
+<span class="info">Navigation tips:</span>
+  - Use Tab for command completion
+  - Use Up/Down arrows for command history
+  - Commands are case-insensitive
+                `;
+            },
+
+            about: () => {
+                return `
+<span class="info">About ${portfolio.name}</span>
+
+Hello! I'm ${portfolio.name}, a passionate ${portfolio.title} with a love for creating 
+innovative web solutions. I enjoy working with modern technologies and solving 
+complex problems through clean, efficient code.
+
+I specialize in full-stack development with experience in both frontend and 
+backend technologies. I'm always eager to learn new technologies and take on 
+challenging projects.
+
+When I'm not coding, you can find me exploring new tech trends, contributing to 
+open-source projects, or enjoying outdoor activities.
+                `;
+            },
+
+            skills: () => {
+                let skillsHtml = '<span class="info">Technical Skills</span>\n\n';
+                
+                Object.entries(portfolio.skills).forEach(([skill, level]) => {
+                    const barLength = Math.floor(level / 5);
+                    const bar = '█'.repeat(barLength) + '░'.repeat(20 - barLength);
+                    skillsHtml += `<div class="skill-bar">`;
+                    skillsHtml += `<span class="skill-name">${skill}</span>`;
+                    skillsHtml += `<span class="success">[${bar}]</span>`;
+                    skillsHtml += `<span class="skill-percent">${level}%</span>`;
+                    skillsHtml += `</div>`;
+                });
+
+                return skillsHtml;
+            },
+
+            projects: () => {
+                let projectsHtml = '<span class="info">Recent Projects</span>\n\n';
+                
+                portfolio.projects.forEach((project, index) => {
+                    projectsHtml += `<span class="success">${index + 1}. ${project.name}</span>\n`;
+                    projectsHtml += `   ${project.description}\n`;
+                    projectsHtml += `   <span class="warning">Tech Stack:</span> ${project.tech}\n`;
+                    projectsHtml += `   <span class="info">URL:</span> ${project.url}\n\n`;
+                });
+
+                return projectsHtml;
+            },
+
+            experience: () => {
+                let expHtml = '<span class="info">Work Experience</span>\n\n';
+                
+                portfolio.experience.forEach((job) => {
+                    expHtml += `<span class="success">${job.role}</span> at <span class="info">${job.company}</span>\n`;
+                    expHtml += `<span class="warning">${job.period}</span>\n`;
+                    expHtml += `${job.description}\n\n`;
+                });
+
+                return expHtml;
+            },
+
+            contact: () => {
+                return `
+<span class="info">Contact Information</span>
+
+<span class="success">Email:</span>    ${portfolio.email}
+<span class="success">GitHub:</span>   ${portfolio.github}  
+<span class="success">LinkedIn:</span> ${portfolio.linkedin}
+
+<span class="info">Feel free to reach out for collaborations or opportunities!</span>
+                `;
+            },
+
+            resume: () => {
+                return `
+<span class="info">Resume Download</span>
+
+<span class="warning">Note:</span> To add a resume download link, upload your resume to your 
+GitHub repository and update the URL below.
+
+<span class="success">Resume URL:</span> https://github.com/yourusername/portfolio/blob/main/resume.pdf
+
+<span class="info">You can also generate a PDF of this terminal portfolio by printing this page!</span>
+                `;
+            },
+
+            clear: () => {
+                output.innerHTML = '';
+                return '';
+            }
+        };
+
+        let commandHistory = [];
+        let historyIndex = -1;
+
+        function addToOutput(content, className = '') {
+            const div = document.createElement('div');
+            div.className = `line ${className}`;
+            div.innerHTML = content;
+            output.appendChild(div);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function processCommand(cmd) {
+            const command = cmd.toLowerCase().trim();
+            
+            // Add command to history
+            if (command && commandHistory[commandHistory.length - 1] !== command) {
+                commandHistory.push(command);
+            }
+            historyIndex = commandHistory.length;
+
+            // Display the command
+            addToOutput(`<span class="prompt">visitor@portfolio:~$</span><span class="command">${cmd}</span>`);
+
+            // Process the command
+            if (commands[command]) {
+                const result = commands[command]();
+                if (result) {
+                    addToOutput(result);
+                }
+            } else if (command === '') {
+                // Do nothing for empty command
+            } else {
+                addToOutput(`<span class="error">Command not found: ${command}</span>`);
+                addToOutput(`Type <span class="success">'help'</span> to see available commands.`);
+            }
+        }
+
+        // Handle input
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = input.value;
+                processCommand(command);
+                input.value = '';
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    input.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    input.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    input.value = '';
+                }
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                const partial = input.value.toLowerCase();
+                const matches = Object.keys(commands).filter(cmd => cmd.startsWith(partial));
+                if (matches.length === 1) {
+                    input.value = matches[0];
+                }
+            }
+        });
+
+        // Keep input focused
+        document.addEventListener('click', () => {
+            input.focus();
+        });
+
+        // Initial welcome message
+        setTimeout(() => {
+            addToOutput(`<span class="success">System initialized successfully.</span>`);
+            addToOutput(`<span class="info">Welcome to ${portfolio.name}'s portfolio terminal!</span>`);
+            addToOutput(`Type <span class="success">'help'</span> to see available commands.`);
+        }, 500);
+    </script>
+</body>
+</html>
