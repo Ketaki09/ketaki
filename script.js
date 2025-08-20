@@ -1,317 +1,368 @@
-const output = document.getElementById('output');
-const input = document.getElementById('terminal-input');
+// Navigation functionality
+const hamburger = document.querySelector('.hamburger');
+const navMenu = document.querySelector('.nav-menu');
+
+hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navMenu.classList.toggle('active');
+});
+
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Navbar background change on scroll
+window.addEventListener('scroll', () => {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(251, 251, 253, 0.95)';
+    } else {
+        navbar.style.background = 'rgba(251, 251, 253, 0.8)';
+    }
+});
+
+// Terminal functionality for Experience section
+const terminalOutput = document.getElementById('terminal-output');
+const terminalInput = document.getElementById('terminal-input');
 const cursor = document.getElementById('cursor');
 
-// Portfolio data - customize this section
-const portfolio = {
-    name: "Ketaki Shintre",
-    title: "Software Developer",
-    email: "kshintre95@gmail.com",
-    github: "https://github.com/ketaki09",
-    linkedin: "https://linkedin.com/in/ketakishintre95",
-    skills: {
-        "Python": 90,
-        "JavaScript": 90,
-        "React": 88,
-        "Node.js": 82,
-        "HTML/CSS": 95,
-        "Git": 87,
-        "SQL": 80,
-        "Docker": 75
-    },
-    projects: [
+// Portfolio data for terminal
+const experienceData = {
+    jobs: [
         {
-            name: "Project One",
-            description: "A full-stack web application built with React and Node.js",
-            tech: "React, Node.js, MongoDB",
-            url: "https://github.com/yourusername/project-one"
+            id: 1,
+            company: "Tech Innovators Inc.",
+            role: "Senior Full Stack Developer",
+            period: "2023 - Present",
+            location: "San Francisco, CA",
+            description: "Leading a team of 5 developers in building scalable web applications using React, Node.js, and AWS. Implemented microservices architecture that improved system performance by 40%.",
+            technologies: ["React", "Node.js", "TypeScript", "AWS", "MongoDB", "Docker"],
+            achievements: [
+                "Led migration to microservices, reducing deployment time by 60%",
+                "Mentored 3 junior developers",
+                "Implemented CI/CD pipeline using GitHub Actions"
+            ]
         },
         {
-            name: "Project Two", 
-            description: "Mobile-first responsive website with modern UI/UX",
-            tech: "HTML, CSS, JavaScript",
-            url: "https://github.com/yourusername/project-two"
+            id: 2,
+            company: "StartupXYZ",
+            role: "Full Stack Developer",
+            period: "2021 - 2023",
+            location: "New York, NY",
+            description: "Developed and maintained multiple client-facing applications serving over 100k users. Built RESTful APIs and responsive web interfaces.",
+            technologies: ["JavaScript", "Python", "React", "Flask", "PostgreSQL", "Redis"],
+            achievements: [
+                "Increased user engagement by 35% through UI/UX improvements",
+                "Optimized database queries, reducing load times by 50%",
+                "Built real-time chat feature using WebSockets"
+            ]
         },
         {
-            name: "Project Three",
-            description: "RESTful API with authentication and database integration",
-            tech: "Python, Flask, PostgreSQL",
-            url: "https://github.com/yourusername/project-three"
+            id: 3,
+            company: "WebDev Solutions",
+            role: "Junior Developer",
+            period: "2020 - 2021",
+            location: "Austin, TX",
+            description: "Started my professional journey building websites and learning full-stack development. Worked on various client projects and internal tools.",
+            technologies: ["HTML", "CSS", "JavaScript", "PHP", "MySQL", "WordPress"],
+            achievements: [
+                "Delivered 15+ client websites on time",
+                "Improved website loading speed by 45% on average",
+                "Created custom WordPress plugins"
+            ]
         }
-    ],
-    experience: [
-        {
-            role: "Senior Software Developer",
-            company: "Iquest Solutions",
-            period: "2021 - Present",
-            description: "Developing web applications and maintaining backend services"
-        },
-        {
-            role: "Software Developer",
-            company: "Iquest Solutions",
-            period: "2019 - 2021",
-            description: "Built responsive websites"
-        }
-    ]   
+    ]
 };
 
-const commands = {
+const terminalCommands = {
     help: () => {
         return `
-<span class="info">Available commands:</span>
+<span class="info">Experience Terminal - Available Commands:</span>
 
-  <span class="success">about</span>      - Learn more about me
-  <span class="success">skills</span>     - View my technical skills  
-  <span class="success">projects</span>   - See my recent projects
-  <span class="success">experience</span> - View my work experience
-  <span class="success">contact</span>    - Get my contact information
-  <span class="success">resume</span>     - Download my resume
-  <span class="success">theme</span>      - Change terminal theme
-  <span class="success">clear</span>      - Clear the terminal
-  <span class="success">help</span>       - Show this help message
+  <span class="success">list</span>          - Show all work experiences
+  <span class="success">show &lt;id&gt;</span>      - View detailed info about a specific job (e.g., 'show 1')
+  <span class="success">skills</span>        - Display all technologies I've worked with
+  <span class="success">timeline</span>      - Show career timeline
+  <span class="success">achievements</span>  - View key accomplishments
+  <span class="success">current</span>       - Show current position details
+  <span class="success">clear</span>         - Clear terminal output
+  <span class="success">help</span>          - Show this help message
 
-<span class="info">Navigation tips:</span>
-  - Use Tab for command completion
-  - Use Up/Down arrows for command history
-  - Commands are case-insensitive
+<span class="info">Navigation Tips:</span>
+  • Use Tab for command completion
+  • Use Up/Down arrows for command history
+  • Commands are case-insensitive
         `;
     },
 
-    about: () => {
-        return `
-<span class="info">About ${portfolio.name}</span>
+    list: () => {
+        let output = '<span class="info">Work Experience Summary:</span>\n\n';
+        experienceData.jobs.forEach(job => {
+            output += `<span class="success">[${job.id}]</span> <span class="warning">${job.role}</span> at <span class="info">${job.company}</span>\n`;
+            output += `    📅 ${job.period} • 📍 ${job.location}\n`;
+            output += `    Use 'show ${job.id}' for detailed information\n\n`;
+        });
+        return output;
+    },
 
-Hello! I'm ${portfolio.name}, a passionate ${portfolio.title} with a love for creating 
-innovative web solutions. I enjoy working with modern technologies and solving 
-complex problems through clean, efficient code.
-
-I specialize in full-stack development with experience in both frontend and 
-backend technologies. I'm always eager to learn new technologies and take on 
-challenging projects.
-
-When I'm not coding, you can find me exploring new tech trends, contributing to 
-open-source projects, or enjoying outdoor activities.
-
-<span class="warning">Fun fact:</span> This portfolio is built entirely with vanilla HTML, CSS, and JavaScript!
-        `;
+    show: (args) => {
+        if (!args || args.length === 0) {
+            return '<span class="error">Please specify a job ID. Use "list" to see all jobs.</span>';
+        }
+        
+        const jobId = parseInt(args[0]);
+        const job = experienceData.jobs.find(j => j.id === jobId);
+        
+        if (!job) {
+            return `<span class="error">Job with ID ${jobId} not found. Use "list" to see available jobs.</span>`;
+        }
+        
+        let output = `<span class="info">📋 ${job.role} at ${job.company}</span>\n\n`;
+        output += `<span class="warning">📅 Duration:</span> ${job.period}\n`;
+        output += `<span class="warning">📍 Location:</span> ${job.location}\n\n`;
+        output += `<span class="success">📝 Description:</span>\n${job.description}\n\n`;
+        output += `<span class="success">🛠️ Technologies:</span>\n`;
+        job.technologies.forEach(tech => {
+            output += `  • ${tech}\n`;
+        });
+        output += `\n<span class="success">🏆 Key Achievements:</span>\n`;
+        job.achievements.forEach(achievement => {
+            output += `  ✓ ${achievement}\n`;
+        });
+        
+        return output;
     },
 
     skills: () => {
-        let skillsHtml = '<span class="info">Technical Skills</span>\n\n';
+        const allSkills = [...new Set(experienceData.jobs.flatMap(job => job.technologies))];
+        const skillCategories = {
+            'Frontend': ['React', 'JavaScript', 'TypeScript', 'HTML', 'CSS'],
+            'Backend': ['Node.js', 'Python', 'Flask', 'PHP'],
+            'Database': ['MongoDB', 'PostgreSQL', 'MySQL', 'Redis'],
+            'DevOps': ['AWS', 'Docker', 'GitHub Actions'],
+            'Other': ['WordPress']
+        };
         
-        Object.entries(portfolio.skills).forEach(([skill, level]) => {
-            const barLength = Math.floor(level / 5);
-            const bar = '█'.repeat(barLength) + '░'.repeat(20 - barLength);
-            skillsHtml += `<div class="skill-bar">`;
-            skillsHtml += `<span class="skill-name">${skill}</span>`;
-            skillsHtml += `<span class="success">[${bar}]</span>`;
-            skillsHtml += `<span class="skill-percent">${level}%</span>`;
-            skillsHtml += `</div>`;
+        let output = '<span class="info">🛠️ Technologies & Skills:</span>\n\n';
+        
+        Object.entries(skillCategories).forEach(([category, categorySkills]) => {
+            const relevantSkills = categorySkills.filter(skill => allSkills.includes(skill));
+            if (relevantSkills.length > 0) {
+                output += `<span class="warning">${category}:</span>\n`;
+                relevantSkills.forEach(skill => {
+                    output += `  • ${skill}\n`;
+                });
+                output += '\n';
+            }
         });
-
-        return skillsHtml;
+        
+        return output;
     },
 
-    projects: () => {
-        let projectsHtml = '<span class="info">Recent Projects</span>\n\n';
+    timeline: () => {
+        let output = '<span class="info">📈 Career Timeline:</span>\n\n';
+        const sortedJobs = [...experienceData.jobs].reverse();
         
-        portfolio.projects.forEach((project, index) => {
-            projectsHtml += `<span class="success">${index + 1}. ${project.name}</span>\n`;
-            projectsHtml += `   ${project.description}\n`;
-            projectsHtml += `   <span class="warning">Tech Stack:</span> ${project.tech}\n`;
-            projectsHtml += `   <span class="info">URL:</span> ${project.url}\n\n`;
+        sortedJobs.forEach((job, index) => {
+            const isLast = index === sortedJobs.length - 1;
+            const connector = isLast ? '└─' : '├─';
+            output += `<span class="success">${connector}</span> <span class="warning">${job.period}</span>\n`;
+            output += `${isLast ? '   ' : '│  '} <span class="info">${job.role}</span>\n`;
+            output += `${isLast ? '   ' : '│  '} <span class="success">${job.company}</span> • ${job.location}\n`;
+            if (!isLast) output += '│\n';
         });
-
-        return projectsHtml;
+        
+        return output;
     },
 
-    experience: () => {
-        let expHtml = '<span class="info">Work Experience</span>\n\n';
+    achievements: () => {
+        let output = '<span class="info">🏆 Key Career Achievements:</span>\n\n';
+        let achievementCount = 1;
         
-        portfolio.experience.forEach((job) => {
-            expHtml += `<span class="success">${job.role}</span> at <span class="info">${job.company}</span>\n`;
-            expHtml += `<span class="warning">${job.period}</span>\n`;
-            expHtml += `${job.description}\n\n`;
+        experienceData.jobs.forEach(job => {
+            job.achievements.forEach(achievement => {
+                output += `<span class="success">${achievementCount}.</span> ${achievement}\n`;
+                output += `   <span class="warning">@${job.company}</span> (${job.period})\n\n`;
+                achievementCount++;
+            });
         });
-
-        return expHtml;
-    },
-
-    contact: () => {
-        return `
-<span class="info">Contact Information</span>
-
-<span class="success">📧 Email:</span>    ${portfolio.email}
-<span class="success">🐙 GitHub:</span>   ${portfolio.github}  
-<span class="success">💼 LinkedIn:</span> ${portfolio.linkedin}
-
-<span class="info">Feel free to reach out for collaborations or opportunities!</span>
-<span class="warning">Available for freelance projects and full-time opportunities.</span>
-        `;
-    },
-
-    resume: () => {
-        return `
-<span class="info">Resume Download</span>
-
-<span class="warning">Note:</span> To add a resume download link, upload your resume to your 
-GitHub repository and update the URL below.
-
-<span class="success">📄 Resume URL:</span> https://github.com/yourusername/portfolio/blob/main/resume.pdf
-
-<span class="info">You can also generate a PDF of this terminal portfolio by printing this page!</span>
-<span class="success">Tip:</span> Use Ctrl+P (or Cmd+P on Mac) to print/save as PDF.
-        `;
-    },
-
-    theme: () => {
-        const themes = ['matrix', 'cyberpunk', 'ocean', 'sunset'];
-        const randomTheme = themes[Math.floor(Math.random() * themes.length)];
         
-        return `
-<span class="info">Terminal Theme</span>
+        return output;
+    },
 
-<span class="success">Current theme:</span> Matrix Green
-<span class="warning">Available themes:</span> ${themes.join(', ')}
-
-<span class="info">Theme switching coming soon! 🎨</span>
-<span class="success">Suggested theme for you:</span> ${randomTheme}
-        `;
+    current: () => {
+        const currentJob = experienceData.jobs[0]; // Assuming first job is current
+        let output = '<span class="info">💼 Current Position:</span>\n\n';
+        output += `<span class="success">Role:</span> ${currentJob.role}\n`;
+        output += `<span class="success">Company:</span> ${currentJob.company}\n`;
+        output += `<span class="success">Since:</span> ${currentJob.period.split(' - ')[0]}\n`;
+        output += `<span class="success">Location:</span> ${currentJob.location}\n\n`;
+        output += `<span class="warning">Current Focus:</span>\n`;
+        output += `${currentJob.description}\n\n`;
+        output += '<span class="info">🚀 Always open to new opportunities and challenges!</span>';
+        
+        return output;
     },
 
     clear: () => {
-        output.innerHTML = '';
+        terminalOutput.innerHTML = '';
         return '';
-    },
-
-    // Easter eggs
-    whoami: () => {
-        return `<span class="info">You are:</span> <span class="success">visitor</span> - A curious explorer of digital portfolios! 🚀`;
-    },
-
-    date: () => {
-        return `<span class="info">Current date:</span> <span class="success">${new Date().toLocaleString()}</span>`;
-    },
-
-    echo: (args) => {
-        return `<span class="success">${args.join(' ')}</span>`;
     }
 };
 
-let commandHistory = [];
-let historyIndex = -1;
+let terminalHistory = [];
+let terminalHistoryIndex = -1;
 
-function addToOutput(content, className = '') {
+function addToTerminalOutput(content, className = '') {
     const div = document.createElement('div');
     div.className = `line ${className}`;
     div.innerHTML = content;
-    output.appendChild(div);
-    output.scrollTop = output.scrollHeight;
+    terminalOutput.appendChild(div);
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
 }
 
-function processCommand(cmd) {
+function processTerminalCommand(cmd) {
     const parts = cmd.trim().split(' ');
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
     
     // Add command to history
-    if (cmd.trim() && commandHistory[commandHistory.length - 1] !== cmd.trim()) {
-        commandHistory.push(cmd.trim());
+    if (cmd.trim() && terminalHistory[terminalHistory.length - 1] !== cmd.trim()) {
+        terminalHistory.push(cmd.trim());
     }
-    historyIndex = commandHistory.length;
+    terminalHistoryIndex = terminalHistory.length;
 
     // Display the command
-    addToOutput(`<span class="prompt">visitor@portfolio:~$</span><span class="command">${cmd}</span>`);
+    addToTerminalOutput(`<span class="prompt">visitor@experience:~$</span><span class="command">${cmd}</span>`);
 
     // Process the command
-    if (commands[command]) {
-        const result = typeof commands[command] === 'function' 
-            ? commands[command](args) 
-            : commands[command];
+    if (terminalCommands[command]) {
+        const result = terminalCommands[command](args);
         if (result) {
-            addToOutput(result);
+            addToTerminalOutput(result);
         }
     } else if (command === '') {
         // Do nothing for empty command
     } else {
-        addToOutput(`<span class="error">Command not found: ${command}</span>`);
-        addToOutput(`Type <span class="success">'help'</span> to see available commands.`);
+        addToTerminalOutput(`<span class="error">Command not found: ${command}</span>`);
+        addToTerminalOutput(`Type <span class="success">'help'</span> to see available commands.`);
         
         // Suggest similar commands
-        const suggestions = Object.keys(commands).filter(cmd => 
+        const suggestions = Object.keys(terminalCommands).filter(cmd => 
             cmd.includes(command) || command.includes(cmd)
         );
         if (suggestions.length > 0) {
-            addToOutput(`<span class="info">Did you mean:</span> <span class="warning">${suggestions.join(', ')}</span>?`);
+            addToTerminalOutput(`<span class="info">Did you mean:</span> <span class="warning">${suggestions.join(', ')}</span>?`);
         }
     }
 }
 
-// Handle input
-input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        const command = input.value;
-        processCommand(command);
-        input.value = '';
-    } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (historyIndex > 0) {
-            historyIndex--;
-            input.value = commandHistory[historyIndex];
+// Terminal input handling
+if (terminalInput) {
+    terminalInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const command = terminalInput.value;
+            processTerminalCommand(command);
+            terminalInput.value = '';
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (terminalHistoryIndex > 0) {
+                terminalHistoryIndex--;
+                terminalInput.value = terminalHistory[terminalHistoryIndex];
+            }
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (terminalHistoryIndex < terminalHistory.length - 1) {
+                terminalHistoryIndex++;
+                terminalInput.value = terminalHistory[terminalHistoryIndex];
+            } else {
+                terminalHistoryIndex = terminalHistory.length;
+                terminalInput.value = '';
+            }
+        } else if (e.key === 'Tab') {
+            e.preventDefault();
+            const partial = terminalInput.value.toLowerCase();
+            const matches = Object.keys(terminalCommands).filter(cmd => cmd.startsWith(partial));
+            if (matches.length === 1) {
+                terminalInput.value = matches[0];
+            } else if (matches.length > 1) {
+                addToTerminalOutput(`<span class="info">Multiple matches:</span> <span class="warning">${matches.join(', ')}</span>`);
+            }
         }
-    } else if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (historyIndex < commandHistory.length - 1) {
-            historyIndex++;
-            input.value = commandHistory[historyIndex];
-        } else {
-            historyIndex = commandHistory.length;
-            input.value = '';
+    });
+
+    // Keep terminal input focused when clicking in terminal area
+    document.querySelector('.terminal').addEventListener('click', () => {
+        terminalInput.focus();
+    });
+}
+
+// Terminal control buttons
+document.querySelectorAll('.terminal-container .control').forEach(control => {
+    control.addEventListener('click', () => {
+        if (control.classList.contains('close')) {
+            addToTerminalOutput(`<span class="warning">Nice try! This terminal is persistent 😄</span>`);
+        } else if (control.classList.contains('minimize')) {
+            addToTerminalOutput(`<span class="info">Terminal minimized... just kidding! 📦</span>`);
+        } else if (control.classList.contains('maximize')) {
+            addToTerminalOutput(`<span class="success">Terminal is already optimized for the best experience! ⚡</span>`);
         }
-    } else if (e.key === 'Tab') {
-        e.preventDefault();
-        const partial = input.value.toLowerCase();
-        const matches = Object.keys(commands).filter(cmd => cmd.startsWith(partial));
-        if (matches.length === 1) {
-            input.value = matches[0];
-        } else if (matches.length > 1) {
-            addToOutput(`<span class="info">Multiple matches:</span> <span class="warning">${matches.join(', ')}</span>`);
-        }
-    } else if (e.key === 'l' && e.ctrlKey) {
-        // Ctrl+L to clear (like real terminal)
-        e.preventDefault();
-        commands.clear();
+        terminalInput.focus();
+    });
+});
+
+// Initialize terminal with welcome message
+document.addEventListener('DOMContentLoaded', () => {
+    if (terminalOutput) {
+        setTimeout(() => {
+            addToTerminalOutput('<span class="success">Experience Terminal initialized successfully.</span>');
+            addToTerminalOutput('<span class="info">Welcome to my professional journey!</span>');
+            addToTerminalOutput('Type <span class="success">\'help\'</span> to explore available commands.');
+            addToTerminalOutput('Try <span class="success">\'list\'</span> to see all my work experiences.');
+        }, 1000);
     }
 });
 
-// Keep input focused
-document.addEventListener('click', () => {
-    input.focus();
-});
-
-// Terminal window controls
-document.querySelector('.close').addEventListener('click', () => {
-    addToOutput(`<span class="warning">Nice try! But you can't close me that easily 😉</span>`);
-});
-
-document.querySelector('.minimize').addEventListener('click', () => {
-    addToOutput(`<span class="info">Minimizing... just kidding! 📦</span>`);
-});
-
-document.querySelector('.maximize').addEventListener('click', () => {
-    addToOutput(`<span class="success">Already maximized for the best experience! ⚡</span>`);
-});
-
-// Initial welcome message with typing effect
-setTimeout(() => {
-    const messages = [
-        `<span class="success">System initialized successfully.</span>`,
-        `<span class="info">Welcome to ${portfolio.name}'s interactive portfolio terminal!</span>`,
-        `<span class="warning">This terminal is powered by creativity and caffeine ☕</span>`,
-        `Type <span class="success">'help'</span> to see available commands.`
-    ];
-    
-    messages.forEach((message, index) => {
-        setTimeout(() => addToOutput(message), index * 800);
+// Form submission handling
+const contactForm = document.querySelector('form');
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Add your form submission logic here
+        alert('Thank you for your message! I\'ll get back to you soon.');
+        contactForm.reset();
     });
-}, 500);
+}
+
+// Intersection Observer for animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+// Observe elements for animation
+document.querySelectorAll('.project-card, .skill-category, .stat-item, .contact-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+});
