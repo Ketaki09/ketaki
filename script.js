@@ -48,7 +48,7 @@ const terminalLines = [
     },
     {
         type: 'output',
-        content: 'Experience: 3+ years in web development'
+        content: 'Experience: 5+ years in web development'
     },
     {
         type: 'output',
