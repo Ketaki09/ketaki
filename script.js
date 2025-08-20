@@ -52,7 +52,7 @@ const portfolio = {
             period: "2019 - 2021",
             description: "Built responsive websites"
         }
-    ]
+    ]   
 };
 
 const commands = {
@@ -66,6 +66,7 @@ const commands = {
   <span class="success">experience</span> - View my work experience
   <span class="success">contact</span>    - Get my contact information
   <span class="success">resume</span>     - Download my resume
+  <span class="success">theme</span>      - Change terminal theme
   <span class="success">clear</span>      - Clear the terminal
   <span class="success">help</span>       - Show this help message
 
@@ -90,6 +91,8 @@ challenging projects.
 
 When I'm not coding, you can find me exploring new tech trends, contributing to 
 open-source projects, or enjoying outdoor activities.
+
+<span class="warning">Fun fact:</span> This portfolio is built entirely with vanilla HTML, CSS, and JavaScript!
         `;
     },
 
@@ -138,11 +141,12 @@ open-source projects, or enjoying outdoor activities.
         return `
 <span class="info">Contact Information</span>
 
-<span class="success">Email:</span>    ${portfolio.email}
-<span class="success">GitHub:</span>   ${portfolio.github}  
-<span class="success">LinkedIn:</span> ${portfolio.linkedin}
+<span class="success">📧 Email:</span>    ${portfolio.email}
+<span class="success">🐙 GitHub:</span>   ${portfolio.github}  
+<span class="success">💼 LinkedIn:</span> ${portfolio.linkedin}
 
 <span class="info">Feel free to reach out for collaborations or opportunities!</span>
+<span class="warning">Available for freelance projects and full-time opportunities.</span>
         `;
     },
 
@@ -153,15 +157,44 @@ open-source projects, or enjoying outdoor activities.
 <span class="warning">Note:</span> To add a resume download link, upload your resume to your 
 GitHub repository and update the URL below.
 
-<span class="success">Resume URL:</span> https://github.com/yourusername/portfolio/blob/main/resume.pdf
+<span class="success">📄 Resume URL:</span> https://github.com/yourusername/portfolio/blob/main/resume.pdf
 
 <span class="info">You can also generate a PDF of this terminal portfolio by printing this page!</span>
+<span class="success">Tip:</span> Use Ctrl+P (or Cmd+P on Mac) to print/save as PDF.
+        `;
+    },
+
+    theme: () => {
+        const themes = ['matrix', 'cyberpunk', 'ocean', 'sunset'];
+        const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+        
+        return `
+<span class="info">Terminal Theme</span>
+
+<span class="success">Current theme:</span> Matrix Green
+<span class="warning">Available themes:</span> ${themes.join(', ')}
+
+<span class="info">Theme switching coming soon! 🎨</span>
+<span class="success">Suggested theme for you:</span> ${randomTheme}
         `;
     },
 
     clear: () => {
         output.innerHTML = '';
         return '';
+    },
+
+    // Easter eggs
+    whoami: () => {
+        return `<span class="info">You are:</span> <span class="success">visitor</span> - A curious explorer of digital portfolios! 🚀`;
+    },
+
+    date: () => {
+        return `<span class="info">Current date:</span> <span class="success">${new Date().toLocaleString()}</span>`;
+    },
+
+    echo: (args) => {
+        return `<span class="success">${args.join(' ')}</span>`;
     }
 };
 
@@ -177,11 +210,13 @@ function addToOutput(content, className = '') {
 }
 
 function processCommand(cmd) {
-    const command = cmd.toLowerCase().trim();
+    const parts = cmd.trim().split(' ');
+    const command = parts[0].toLowerCase();
+    const args = parts.slice(1);
     
     // Add command to history
-    if (command && commandHistory[commandHistory.length - 1] !== command) {
-        commandHistory.push(command);
+    if (cmd.trim() && commandHistory[commandHistory.length - 1] !== cmd.trim()) {
+        commandHistory.push(cmd.trim());
     }
     historyIndex = commandHistory.length;
 
@@ -190,7 +225,9 @@ function processCommand(cmd) {
 
     // Process the command
     if (commands[command]) {
-        const result = commands[command]();
+        const result = typeof commands[command] === 'function' 
+            ? commands[command](args) 
+            : commands[command];
         if (result) {
             addToOutput(result);
         }
@@ -199,6 +236,14 @@ function processCommand(cmd) {
     } else {
         addToOutput(`<span class="error">Command not found: ${command}</span>`);
         addToOutput(`Type <span class="success">'help'</span> to see available commands.`);
+        
+        // Suggest similar commands
+        const suggestions = Object.keys(commands).filter(cmd => 
+            cmd.includes(command) || command.includes(cmd)
+        );
+        if (suggestions.length > 0) {
+            addToOutput(`<span class="info">Did you mean:</span> <span class="warning">${suggestions.join(', ')}</span>?`);
+        }
     }
 }
 
@@ -229,7 +274,13 @@ input.addEventListener('keydown', (e) => {
         const matches = Object.keys(commands).filter(cmd => cmd.startsWith(partial));
         if (matches.length === 1) {
             input.value = matches[0];
+        } else if (matches.length > 1) {
+            addToOutput(`<span class="info">Multiple matches:</span> <span class="warning">${matches.join(', ')}</span>`);
         }
+    } else if (e.key === 'l' && e.ctrlKey) {
+        // Ctrl+L to clear (like real terminal)
+        e.preventDefault();
+        commands.clear();
     }
 });
 
@@ -238,9 +289,29 @@ document.addEventListener('click', () => {
     input.focus();
 });
 
-// Initial welcome message
+// Terminal window controls
+document.querySelector('.close').addEventListener('click', () => {
+    addToOutput(`<span class="warning">Nice try! But you can't close me that easily 😉</span>`);
+});
+
+document.querySelector('.minimize').addEventListener('click', () => {
+    addToOutput(`<span class="info">Minimizing... just kidding! 📦</span>`);
+});
+
+document.querySelector('.maximize').addEventListener('click', () => {
+    addToOutput(`<span class="success">Already maximized for the best experience! ⚡</span>`);
+});
+
+// Initial welcome message with typing effect
 setTimeout(() => {
-    addToOutput(`<span class="success">System initialized successfully.</span>`);
-    addToOutput(`<span class="info">Welcome to ${portfolio.name}'s portfolio terminal!</span>`);
-    addToOutput(`Type <span class="success">'help'</span> to see available commands.`);
+    const messages = [
+        `<span class="success">System initialized successfully.</span>`,
+        `<span class="info">Welcome to ${portfolio.name}'s interactive portfolio terminal!</span>`,
+        `<span class="warning">This terminal is powered by creativity and caffeine ☕</span>`,
+        `Type <span class="success">'help'</span> to see available commands.`
+    ];
+    
+    messages.forEach((message, index) => {
+        setTimeout(() => addToOutput(message), index * 800);
+    });
 }, 500);

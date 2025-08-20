@@ -6,18 +6,172 @@
 
 body {
     font-family: 'Courier New', monospace;
-    background-color: #0a0a0a;
-    color: #00ff00;
     overflow: hidden;
     height: 100vh;
 }
 
-.terminal {
+.background {
     height: 100vh;
-    padding: 20px;
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    width: 100vw;
+    background: linear-gradient(
+        135deg,
+        #667eea 0%,
+        #764ba2 25%,
+        #f093fb 50%,
+        #f5576c 75%,
+        #4facfe 100%
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
+    overflow: hidden;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.floating-shapes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.shape {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    animation: float 20s infinite ease-in-out;
+}
+
+.shape-1 {
+    width: 100px;
+    height: 100px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.shape-2 {
+    width: 150px;
+    height: 150px;
+    top: 60%;
+    left: 80%;
+    animation-delay: 5s;
+}
+
+.shape-3 {
+    width: 80px;
+    height: 80px;
+    top: 80%;
+    left: 20%;
+    animation-delay: 10s;
+}
+
+.shape-4 {
+    width: 120px;
+    height: 120px;
+    top: 10%;
+    left: 70%;
+    animation-delay: 15s;
+}
+
+.shape-5 {
+    width: 90px;
+    height: 90px;
+    top: 40%;
+    left: 50%;
+    animation-delay: 8s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-30px) rotate(120deg); }
+    66% { transform: translateY(20px) rotate(240deg); }
+}
+
+.terminal-container {
+    width: 90%;
+    max-width: 1000px;
+    height: 80vh;
+    max-height: 700px;
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+.terminal-header {
+    height: 40px;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terminal-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.control {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.control:hover {
+    transform: scale(1.2);
+}
+
+.close {
+    background: #ff5f57;
+    box-shadow: 0 0 10px rgba(255, 95, 87, 0.5);
+}
+
+.minimize {
+    background: #ffbd2e;
+    box-shadow: 0 0 10px rgba(255, 189, 46, 0.5);
+}
+
+.maximize {
+    background: #28ca42;
+    box-shadow: 0 0 10px rgba(40, 202, 66, 0.5);
+}
+
+.terminal-title {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.terminal {
+    height: calc(100% - 40px);
+    padding: 20px;
+    background: rgba(10, 10, 10, 0.9);
+    color: #00ff00;
     overflow-y: auto;
+    position: relative;
 }
 
 .terminal::before {
@@ -53,6 +207,7 @@ body {
     font-size: 8px;
     line-height: 1;
     margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
 .output {
@@ -71,6 +226,7 @@ body {
     color: #00ff00;
     margin-right: 10px;
     flex-shrink: 0;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
 }
 
 .command {
@@ -100,6 +256,7 @@ body {
     color: #0a0a0a;
     animation: blink 1s infinite;
     padding: 0 2px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
 @keyframes blink {
@@ -107,10 +264,25 @@ body {
     51%, 100% { opacity: 0; }
 }
 
-.success { color: #00ff00; }
-.error { color: #ff0000; }
-.info { color: #00aaff; }
-.warning { color: #ffaa00; }
+.success { 
+    color: #00ff00; 
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+.error { 
+    color: #ff0000; 
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+}
+
+.info { 
+    color: #00aaff; 
+    text-shadow: 0 0 5px rgba(0, 170, 255, 0.3);
+}
+
+.warning { 
+    color: #ffaa00; 
+    text-shadow: 0 0 5px rgba(255, 170, 0, 0.3);
+}
 
 .skill-bar {
     display: flex;
@@ -121,30 +293,61 @@ body {
 .skill-name {
     width: 150px;
     color: #00aaff;
+    text-shadow: 0 0 5px rgba(0, 170, 255, 0.3);
 }
 
 .skill-progress {
     flex: 1;
     max-width: 200px;
-    background: #333;
+    background: rgba(51, 51, 51, 0.5);
     height: 20px;
     margin: 0 10px;
     position: relative;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .skill-fill {
     height: 100%;
     background: linear-gradient(90deg, #00ff00, #00aa00);
     transition: width 1s ease-in-out;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
 }
 
 .skill-percent {
     color: #ffffff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+/* Scrollbar styling */
+.terminal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.terminal::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 0, 0.3);
+    border-radius: 4px;
+}
+
+.terminal::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 0, 0.5);
 }
 
 @media (max-width: 768px) {
+    .terminal-container {
+        width: 95%;
+        height: 85vh;
+        border-radius: 15px;
+    }
+    
     .terminal {
-        padding: 10px;
+        padding: 15px;
         font-size: 12px;
     }
     
@@ -158,5 +361,19 @@ body {
     
     .skill-progress {
         max-width: 150px;
+    }
+    
+    .terminal-header {
+        height: 35px;
+        padding: 0 15px;
+    }
+    
+    .control {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .terminal-title {
+        font-size: 11px;
     }
 }
