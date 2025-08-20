@@ -1,0 +1,162 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #0a0a0a;
+    color: #00ff00;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.terminal {
+    height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    position: relative;
+    overflow-y: auto;
+}
+
+.terminal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 0, 0.03) 2px,
+            rgba(0, 255, 0, 0.03) 4px
+        );
+    pointer-events: none;
+    z-index: 1;
+}
+
+.header {
+    color: #00ff00;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+    position: relative;
+    z-index: 2;
+}
+
+.ascii-art {
+    color: #00ff00;
+    font-size: 8px;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.output {
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.line {
+    margin-bottom: 5px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.prompt {
+    color: #00ff00;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.command {
+    color: #ffffff;
+}
+
+.input-line {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+#terminal-input {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    outline: none;
+    flex: 1;
+    padding: 0;
+}
+
+.cursor {
+    background-color: #00ff00;
+    color: #0a0a0a;
+    animation: blink 1s infinite;
+    padding: 0 2px;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.success { color: #00ff00; }
+.error { color: #ff0000; }
+.info { color: #00aaff; }
+.warning { color: #ffaa00; }
+
+.skill-bar {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.skill-name {
+    width: 150px;
+    color: #00aaff;
+}
+
+.skill-progress {
+    flex: 1;
+    max-width: 200px;
+    background: #333;
+    height: 20px;
+    margin: 0 10px;
+    position: relative;
+}
+
+.skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff00, #00aa00);
+    transition: width 1s ease-in-out;
+}
+
+.skill-percent {
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .terminal {
+        padding: 10px;
+        font-size: 12px;
+    }
+    
+    .ascii-art {
+        font-size: 6px;
+    }
+    
+    .skill-name {
+        width: 100px;
+    }
+    
+    .skill-progress {
+        max-width: 150px;
+    }
+}
