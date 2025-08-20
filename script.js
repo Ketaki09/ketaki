@@ -1,10 +1,21 @@
-// Navigation functionality
+// DOM Elements
 const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
+const navLinks = document.querySelector('.nav-links');
+const terminalContent = document.getElementById('terminal-content');
+const contactForm = document.getElementById('contact-form');
 
+// Mobile Navigation Toggle
 hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
+    navLinks.classList.toggle('active');
+});
+
+// Close mobile menu when clicking on a link
+navLinks.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+    }
 });
 
 // Smooth scrolling for navigation links
@@ -13,335 +24,90 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+            const headerOffset = 80;
+            const elementPosition = target.offsetTop;
+            const offsetPosition = elementPosition - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
             });
         }
     });
 });
 
-// Navbar background change on scroll
-window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 100) {
-        navbar.style.background = 'rgba(251, 251, 253, 0.95)';
-    } else {
-        navbar.style.background = 'rgba(251, 251, 253, 0.8)';
+// Terminal Animation
+const terminalLines = [
+    {
+        type: 'command',
+        content: '<span class="prompt">ketaki@portfolio:~$</span> <span class="command">cat about.txt</span>'
+    },
+    {
+        type: 'output',
+        content: 'Full Stack Developer passionate about creating innovative solutions'
+    },
+    {
+        type: 'output',
+        content: 'Experience: 3+ years in web development'
+    },
+    {
+        type: 'output',
+        content: 'Education: Computer Science Graduate'
+    },
+    {
+        type: 'command',
+        content: '<span class="prompt">ketaki@portfolio:~$</span> <span class="command">ls skills/</span>'
+    },
+    {
+        type: 'output',
+        content: 'frontend/  backend/  databases/  tools/  design/'
+    },
+    {
+        type: 'command',
+        content: '<span class="prompt">ketaki@portfolio:~$</span> <span class="command">echo $MOTTO</span>'
+    },
+    {
+        type: 'output',
+        content: '"Code with purpose, design with passion, deliver with excellence"'
+    },
+    {
+        type: 'command',
+        content: '<span class="prompt">ketaki@portfolio:~$</span> <span class="command typing-animation">_</span>'
     }
-});
+];
 
-// Terminal functionality for Experience section
-const terminalOutput = document.getElementById('terminal-output');
-const terminalInput = document.getElementById('terminal-input');
-const cursor = document.getElementById('cursor');
+let currentLine = 0;
+let isTyping = false;
 
-// Portfolio data for terminal
-const experienceData = {
-    jobs: [
-        {
-            id: 1,
-            company: "Tech Innovators Inc.",
-            role: "Senior Full Stack Developer",
-            period: "2023 - Present",
-            location: "San Francisco, CA",
-            description: "Leading a team of 5 developers in building scalable web applications using React, Node.js, and AWS. Implemented microservices architecture that improved system performance by 40%.",
-            technologies: ["React", "Node.js", "TypeScript", "AWS", "MongoDB", "Docker"],
-            achievements: [
-                "Led migration to microservices, reducing deployment time by 60%",
-                "Mentored 3 junior developers",
-                "Implemented CI/CD pipeline using GitHub Actions"
-            ]
-        },
-        {
-            id: 2,
-            company: "StartupXYZ",
-            role: "Full Stack Developer",
-            period: "2021 - 2023",
-            location: "New York, NY",
-            description: "Developed and maintained multiple client-facing applications serving over 100k users. Built RESTful APIs and responsive web interfaces.",
-            technologies: ["JavaScript", "Python", "React", "Flask", "PostgreSQL", "Redis"],
-            achievements: [
-                "Increased user engagement by 35% through UI/UX improvements",
-                "Optimized database queries, reducing load times by 50%",
-                "Built real-time chat feature using WebSockets"
-            ]
-        },
-        {
-            id: 3,
-            company: "WebDev Solutions",
-            role: "Junior Developer",
-            period: "2020 - 2021",
-            location: "Austin, TX",
-            description: "Started my professional journey building websites and learning full-stack development. Worked on various client projects and internal tools.",
-            technologies: ["HTML", "CSS", "JavaScript", "PHP", "MySQL", "WordPress"],
-            achievements: [
-                "Delivered 15+ client websites on time",
-                "Improved website loading speed by 45% on average",
-                "Created custom WordPress plugins"
-            ]
-        }
-    ]
-};
-
-const terminalCommands = {
-    help: () => {
-        return `
-<span class="info">Experience Terminal - Available Commands:</span>
-
-  <span class="success">list</span>          - Show all work experiences
-  <span class="success">show &lt;id&gt;</span>      - View detailed info about a specific job (e.g., 'show 1')
-  <span class="success">skills</span>        - Display all technologies I've worked with
-  <span class="success">timeline</span>      - Show career timeline
-  <span class="success">achievements</span>  - View key accomplishments
-  <span class="success">current</span>       - Show current position details
-  <span class="success">clear</span>         - Clear terminal output
-  <span class="success">help</span>          - Show this help message
-
-<span class="info">Navigation Tips:</span>
-  • Use Tab for command completion
-  • Use Up/Down arrows for command history
-  • Commands are case-insensitive
-        `;
-    },
-
-    list: () => {
-        let output = '<span class="info">Work Experience Summary:</span>\n\n';
-        experienceData.jobs.forEach(job => {
-            output += `<span class="success">[${job.id}]</span> <span class="warning">${job.role}</span> at <span class="info">${job.company}</span>\n`;
-            output += `    📅 ${job.period} • 📍 ${job.location}\n`;
-            output += `    Use 'show ${job.id}' for detailed information\n\n`;
-        });
-        return output;
-    },
-
-    show: (args) => {
-        if (!args || args.length === 0) {
-            return '<span class="error">Please specify a job ID. Use "list" to see all jobs.</span>';
-        }
-        
-        const jobId = parseInt(args[0]);
-        const job = experienceData.jobs.find(j => j.id === jobId);
-        
-        if (!job) {
-            return `<span class="error">Job with ID ${jobId} not found. Use "list" to see available jobs.</span>`;
-        }
-        
-        let output = `<span class="info">📋 ${job.role} at ${job.company}</span>\n\n`;
-        output += `<span class="warning">📅 Duration:</span> ${job.period}\n`;
-        output += `<span class="warning">📍 Location:</span> ${job.location}\n\n`;
-        output += `<span class="success">📝 Description:</span>\n${job.description}\n\n`;
-        output += `<span class="success">🛠️ Technologies:</span>\n`;
-        job.technologies.forEach(tech => {
-            output += `  • ${tech}\n`;
-        });
-        output += `\n<span class="success">🏆 Key Achievements:</span>\n`;
-        job.achievements.forEach(achievement => {
-            output += `  ✓ ${achievement}\n`;
-        });
-        
-        return output;
-    },
-
-    skills: () => {
-        const allSkills = [...new Set(experienceData.jobs.flatMap(job => job.technologies))];
-        const skillCategories = {
-            'Frontend': ['React', 'JavaScript', 'TypeScript', 'HTML', 'CSS'],
-            'Backend': ['Node.js', 'Python', 'Flask', 'PHP'],
-            'Database': ['MongoDB', 'PostgreSQL', 'MySQL', 'Redis'],
-            'DevOps': ['AWS', 'Docker', 'GitHub Actions'],
-            'Other': ['WordPress']
-        };
-        
-        let output = '<span class="info">🛠️ Technologies & Skills:</span>\n\n';
-        
-        Object.entries(skillCategories).forEach(([category, categorySkills]) => {
-            const relevantSkills = categorySkills.filter(skill => allSkills.includes(skill));
-            if (relevantSkills.length > 0) {
-                output += `<span class="warning">${category}:</span>\n`;
-                relevantSkills.forEach(skill => {
-                    output += `  • ${skill}\n`;
-                });
-                output += '\n';
-            }
-        });
-        
-        return output;
-    },
-
-    timeline: () => {
-        let output = '<span class="info">📈 Career Timeline:</span>\n\n';
-        const sortedJobs = [...experienceData.jobs].reverse();
-        
-        sortedJobs.forEach((job, index) => {
-            const isLast = index === sortedJobs.length - 1;
-            const connector = isLast ? '└─' : '├─';
-            output += `<span class="success">${connector}</span> <span class="warning">${job.period}</span>\n`;
-            output += `${isLast ? '   ' : '│  '} <span class="info">${job.role}</span>\n`;
-            output += `${isLast ? '   ' : '│  '} <span class="success">${job.company}</span> • ${job.location}\n`;
-            if (!isLast) output += '│\n';
-        });
-        
-        return output;
-    },
-
-    achievements: () => {
-        let output = '<span class="info">🏆 Key Career Achievements:</span>\n\n';
-        let achievementCount = 1;
-        
-        experienceData.jobs.forEach(job => {
-            job.achievements.forEach(achievement => {
-                output += `<span class="success">${achievementCount}.</span> ${achievement}\n`;
-                output += `   <span class="warning">@${job.company}</span> (${job.period})\n\n`;
-                achievementCount++;
-            });
-        });
-        
-        return output;
-    },
-
-    current: () => {
-        const currentJob = experienceData.jobs[0]; // Assuming first job is current
-        let output = '<span class="info">💼 Current Position:</span>\n\n';
-        output += `<span class="success">Role:</span> ${currentJob.role}\n`;
-        output += `<span class="success">Company:</span> ${currentJob.company}\n`;
-        output += `<span class="success">Since:</span> ${currentJob.period.split(' - ')[0]}\n`;
-        output += `<span class="success">Location:</span> ${currentJob.location}\n\n`;
-        output += `<span class="warning">Current Focus:</span>\n`;
-        output += `${currentJob.description}\n\n`;
-        output += '<span class="info">🚀 Always open to new opportunities and challenges!</span>';
-        
-        return output;
-    },
-
-    clear: () => {
-        terminalOutput.innerHTML = '';
-        return '';
-    }
-};
-
-let terminalHistory = [];
-let terminalHistoryIndex = -1;
-
-function addToTerminalOutput(content, className = '') {
-    const div = document.createElement('div');
-    div.className = `line ${className}`;
-    div.innerHTML = content;
-    terminalOutput.appendChild(div);
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
-}
-
-function processTerminalCommand(cmd) {
-    const parts = cmd.trim().split(' ');
-    const command = parts[0].toLowerCase();
-    const args = parts.slice(1);
+function typeTerminalLine() {
+    if (currentLine >= terminalLines.length) return;
     
-    // Add command to history
-    if (cmd.trim() && terminalHistory[terminalHistory.length - 1] !== cmd.trim()) {
-        terminalHistory.push(cmd.trim());
-    }
-    terminalHistoryIndex = terminalHistory.length;
-
-    // Display the command
-    addToTerminalOutput(`<span class="prompt">visitor@experience:~$</span><span class="command">${cmd}</span>`);
-
-    // Process the command
-    if (terminalCommands[command]) {
-        const result = terminalCommands[command](args);
-        if (result) {
-            addToTerminalOutput(result);
-        }
-    } else if (command === '') {
-        // Do nothing for empty command
+    isTyping = true;
+    const line = terminalLines[currentLine];
+    const terminalLine = document.createElement('div');
+    terminalLine.className = 'terminal-line';
+    
+    if (line.type === 'command') {
+        terminalLine.innerHTML = line.content;
     } else {
-        addToTerminalOutput(`<span class="error">Command not found: ${command}</span>`);
-        addToTerminalOutput(`Type <span class="success">'help'</span> to see available commands.`);
+        terminalLine.textContent = line.content;
+        terminalLine.style.color = 'var(--light-gray)';
+        terminalLine.style.marginLeft = '1rem';
+    }
+    
+    terminalContent.appendChild(terminalLine);
+    
+    // Animate the line appearing
+    setTimeout(() => {
+        terminalLine.style.opacity = '1';
+        currentLine++;
+        isTyping = false;
         
-        // Suggest similar commands
-        const suggestions = Object.keys(terminalCommands).filter(cmd => 
-            cmd.includes(command) || command.includes(cmd)
-        );
-        if (suggestions.length > 0) {
-            addToTerminalOutput(`<span class="info">Did you mean:</span> <span class="warning">${suggestions.join(', ')}</span>?`);
+        // Continue to next line after a delay
+        if (currentLine < terminalLines.length) {
+            setTimeout(typeTerminalLine, line.type === 'command' ? 1000 : 800);
         }
-    }
-}
-
-// Terminal input handling
-if (terminalInput) {
-    terminalInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const command = terminalInput.value;
-            processTerminalCommand(command);
-            terminalInput.value = '';
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            if (terminalHistoryIndex > 0) {
-                terminalHistoryIndex--;
-                terminalInput.value = terminalHistory[terminalHistoryIndex];
-            }
-        } else if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            if (terminalHistoryIndex < terminalHistory.length - 1) {
-                terminalHistoryIndex++;
-                terminalInput.value = terminalHistory[terminalHistoryIndex];
-            } else {
-                terminalHistoryIndex = terminalHistory.length;
-                terminalInput.value = '';
-            }
-        } else if (e.key === 'Tab') {
-            e.preventDefault();
-            const partial = terminalInput.value.toLowerCase();
-            const matches = Object.keys(terminalCommands).filter(cmd => cmd.startsWith(partial));
-            if (matches.length === 1) {
-                terminalInput.value = matches[0];
-            } else if (matches.length > 1) {
-                addToTerminalOutput(`<span class="info">Multiple matches:</span> <span class="warning">${matches.join(', ')}</span>`);
-            }
-        }
-    });
-
-    // Keep terminal input focused when clicking in terminal area
-    document.querySelector('.terminal').addEventListener('click', () => {
-        terminalInput.focus();
-    });
-}
-
-// Terminal control buttons
-document.querySelectorAll('.terminal-container .control').forEach(control => {
-    control.addEventListener('click', () => {
-        if (control.classList.contains('close')) {
-            addToTerminalOutput(`<span class="warning">Nice try! This terminal is persistent 😄</span>`);
-        } else if (control.classList.contains('minimize')) {
-            addToTerminalOutput(`<span class="info">Terminal minimized... just kidding! 📦</span>`);
-        } else if (control.classList.contains('maximize')) {
-            addToTerminalOutput(`<span class="success">Terminal is already optimized for the best experience! ⚡</span>`);
-        }
-        terminalInput.focus();
-    });
-});
-
-// Initialize terminal with welcome message
-document.addEventListener('DOMContentLoaded', () => {
-    if (terminalOutput) {
-        setTimeout(() => {
-            addToTerminalOutput('<span class="success">Experience Terminal initialized successfully.</span>');
-            addToTerminalOutput('<span class="info">Welcome to my professional journey!</span>');
-            addToTerminalOutput('Type <span class="success">\'help\'</span> to explore available commands.');
-            addToTerminalOutput('Try <span class="success">\'list\'</span> to see all my work experiences.');
-        }, 1000);
-    }
-});
-
-// Form submission handling
-const contactForm = document.querySelector('form');
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        // Add your form submission logic here
-        alert('Thank you for your message! I\'ll get back to you soon.');
-        contactForm.reset();
-    });
+    }, 100);
 }
 
 // Intersection Observer for animations
@@ -353,16 +119,370 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
+            // Add fade-in animation
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
+            
+            // Start terminal animation when terminal section is visible
+            if (entry.target.classList.contains('terminal-section') && !isTyping && currentLine === 0) {
+                setTimeout(() => {
+                    typeTerminalLine();
+                }, 500);
+            }
+            
+            // Animate skill cards
+            if (entry.target.classList.contains('skill-card')) {
+                entry.target.style.animationDelay = `${Math.random() * 0.5}s`;
+                entry.target.classList.add('animate-in');
+            }
+            
+            // Animate project cards
+            if (entry.target.classList.contains('project-card')) {
+                entry.target.style.animationDelay = `${Math.random() * 0.3}s`;
+                entry.target.classList.add('animate-in');
+            }
         }
     });
 }, observerOptions);
 
-// Observe elements for animation
-document.querySelectorAll('.project-card, .skill-category, .stat-item, .contact-item').forEach(el => {
+// Observe all animatable elements
+document.querySelectorAll('section, .skill-card, .project-card, .stat-item').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(el);
 });
+
+// Navbar scroll effect
+let lastScrollTop = 0;
+const navbar = document.querySelector('nav');
+
+window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Add/remove background opacity based on scroll
+    if (scrollTop > 100) {
+        navbar.style.backgroundColor = 'rgba(34, 40, 49, 0.95)';
+        navbar.style.backdropFilter = 'blur(10px)';
+    } else {
+        navbar.style.backgroundColor = 'var(--dark-gray)';
+        navbar.style.backdropFilter = 'none';
+    }
+    
+    // Hide/show navbar on scroll
+    if (scrollTop > lastScrollTop && scrollTop > 500) {
+        navbar.style.transform = 'translateY(-100%)';
+    } else {
+        navbar.style.transform = 'translateY(0)';
+    }
+    
+    lastScrollTop = scrollTop;
+});
+
+// Contact form handling
+contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const submitBtn = contactForm.querySelector('.submit-btn');
+    const originalText = submitBtn.textContent;
+    
+    // Show loading state
+    submitBtn.innerHTML = '<span class="loading"></span> Sending...';
+    submitBtn.disabled = true;
+    
+    // Get form data
+    const formData = new FormData(contactForm);
+    const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        message: formData.get('message')
+    };
+    
+    try {
+        // Simulate form submission (replace with actual endpoint)
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Show success message
+        submitBtn.innerHTML = '✓ Message Sent!';
+        submitBtn.style.background = '#27ca3f';
+        
+        // Reset form
+        contactForm.reset();
+        
+        // Show success notification
+        showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
+        
+    } catch (error) {
+        // Show error message
+        submitBtn.innerHTML = '✗ Failed to Send';
+        submitBtn.style.background = '#ff5f56';
+        
+        showNotification('Failed to send message. Please try again.', 'error');
+    }
+    
+    // Reset button after 3 seconds
+    setTimeout(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.style.background = 'linear-gradient(135deg, var(--cyan), #007a85)';
+        submitBtn.disabled = false;
+    }, 3000);
+});
+
+// Notification system
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()">×</button>
+    `;
+    
+    // Add notification styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: ${type === 'success' ? '#27ca3f' : type === 'error' ? '#ff5f56' : 'var(--cyan)'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        max-width: 300px;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    const closeBtn = notification.querySelector('button');
+    closeBtn.style.cssText = `
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+// Add CSS for notification animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .animate-in {
+        animation: fadeInUp 0.6s ease forwards;
+    }
+`;
+document.head.appendChild(style);
+
+// Parallax effect for hero section
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const hero = document.querySelector('.hero');
+    const rate = scrolled * -0.5;
+    
+    if (hero) {
+        hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+    }
+});
+
+// Skills section counter animation
+function animateCounters() {
+    const counters = document.querySelectorAll('.stat-item h4');
+    
+    counters.forEach(counter => {
+        const target = parseInt(counter.textContent);
+        const increment = target / 50;
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                counter.textContent = target + '+';
+                clearInterval(timer);
+            } else {
+                counter.textContent = Math.floor(current) + '+';
+            }
+        }, 50);
+    });
+}
+
+// Trigger counter animation when stats section is visible
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            animateCounters();
+            statsObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.5 });
+
+const statsSection = document.querySelector('.stats');
+if (statsSection) {
+    statsObserver.observe(statsSection);
+}
+
+// Theme toggle functionality (bonus feature)
+function createThemeToggle() {
+    const toggleBtn = document.createElement('button');
+    toggleBtn.innerHTML = '🌙';
+    toggleBtn.className = 'theme-toggle';
+    toggleBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: none;
+        background: var(--cyan);
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0, 173, 181, 0.3);
+        z-index: 1000;
+        transition: all 0.3s ease;
+    `;
+    
+    toggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        toggleBtn.innerHTML = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
+    });
+    
+    document.body.appendChild(toggleBtn);
+}
+
+// Initialize theme toggle
+createThemeToggle();
+
+// Typing effect for hero subtitle
+function typeWriter(element, text, speed = 100) {
+    let i = 0;
+    const originalText = text;
+    element.textContent = '';
+    
+    function type() {
+        if (i < originalText.length) {
+            element.textContent += originalText.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        }
+    }
+    
+    type();
+}
+
+// Start typing effect when page loads
+window.addEventListener('load', () => {
+    const subtitle = document.querySelector('.hero .subtitle');
+    if (subtitle) {
+        const text = subtitle.textContent;
+        typeWriter(subtitle, text, 80);
+    }
+});
+
+// Smooth reveal animations for elements
+function revealOnScroll() {
+    const reveals = document.querySelectorAll('.fade-in');
+    
+    reveals.forEach(element => {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < windowHeight - elementVisible) {
+            element.classList.add('active');
+        }
+    });
+}
+
+window.addEventListener('scroll', revealOnScroll);
+
+// Add active class styles
+const activeStyle = document.createElement('style');
+activeStyle.textContent = `
+    .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease;
+    }
+    
+    .fade-in.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
+document.head.appendChild(activeStyle);
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    // Add loading animation
+    document.body.style.opacity = '0';
+    
+    setTimeout(() => {
+        document.body.style.transition = 'opacity 0.5s ease';
+        document.body.style.opacity = '1';
+    }, 100);
+    
+    // Initialize reveal animations
+    revealOnScroll();
+});
+
+// Handle form input focus effects
+document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
+    input.addEventListener('focus', () => {
+        input.parentElement.style.transform = 'scale(1.02)';
+    });
+    
+    input.addEventListener('blur', () => {
+        input.parentElement.style.transform = 'scale(1)';
+    });
+});
+
+// Add easter egg - konami code
+let konamiCode = [];
+const konamiSequence = [
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+    'KeyB', 'KeyA'
+];
+
+document.addEventListener('keydown', (e) => {
+    konamiCode.push(e.code);
+    
+    if (konamiCode.length > konamiSequence.length) {
+        konamiCode.shift();
+    }
+    
+    if (konamiCode.join(',') === konamiSequence.join(',')) {
+        showNotification('🎉 Easter egg found! You\'re awesome!', 'success');
+        konamiCode = [];
+    }
+});
+
+console.log('🚀 Portfolio loaded successfully! Try the Konami code for a surprise...');

@@ -3,223 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Your Name</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Hello, I'm Ketaki Shintre</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <span>Portfolio</span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#hero" class="nav-link">Home</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#skills" class="nav-link">Skills</a></li>
-                <li><a href="#projects" class="nav-link">Projects</a></li>
-                <li><a href="#experience" class="nav-link">Experience</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <div class="logo">Ketaki Shintre</div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="hero" class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Hello, I'm <span class="gradient-text">Ketaki Shintre</span></h1>
-            <p class="hero-subtitle">Full Stack Developer & Creative Problem Solver</p>
-            <p class="hero-description">I create beautiful, functional, and user-centered digital experiences that make a difference.</p>
-            <div class="hero-buttons">
-                <button class="btn btn-primary">View My Work</button>
-                <button class="btn btn-secondary">Get In Touch</button>
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="fade-in">Hello, I'm Ketaki Shintre</h1>
+                <p class="subtitle fade-in">Full Stack Developer & Creative Problem Solver</p>
+                <p class="hero-description fade-in">I create beautiful, functional, and user-centered digital experiences that make a difference.</p>
+                <a href="#contact" class="cta-button fade-in">Let's Work Together</a>
             </div>
-        </div>
-        <div class="hero-visual">
-            <div class="floating-card">
-                <div class="card-content">
-                    <div class="code-snippet">
-                        <div class="code-line"><span class="keyword">const</span> <span class="variable">developer</span> = {</div>
-                        <div class="code-line">  <span class="property">name</span>: <span class="string">'Your Name'</span>,</div>
-                        <div class="code-line">  <span class="property">skills</span>: [<span class="string">'React'</span>, <span class="string">'Node.js'</span>],</div>
-                        <div class="code-line">  <span class="property">passion</span>: <span class="string">'Creating amazing apps'</span></div>
-                        <div class="code-line">};</div>
+            <div class="hero-visual fade-in">
+                <div class="code-animation">
+                    <div class="code-line">
+                        <span class="code-keyword">const</span>
+                        <span class="code-variable">developer</span>
+                        <span class="code-operator">=</span>
+                        <span class="code-bracket">{</span>
+                    </div>
+                    <div class="code-line indent">
+                        <span class="code-property">name:</span>
+                        <span class="code-string">'Ketaki Shintre'</span><span class="code-punctuation">,</span>
+                    </div>
+                    <div class="code-line indent">
+                        <span class="code-property">skills:</span>
+                        <span class="code-bracket">[</span><span class="code-string">'React'</span><span class="code-punctuation">,</span>
+                        <span class="code-string">'Node.js'</span><span class="code-punctuation">,</span>
+                        <span class="code-string">'Python'</span><span class="code-bracket">]</span><span class="code-punctuation">,</span>
+                    </div>
+                    <div class="code-line indent">
+                        <span class="code-property">passion:</span>
+                        <span class="code-string">'Creating Amazing Apps'</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="code-bracket">};</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="section">
+    <section id="about" class="about">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">About Me</h2>
-                <p class="section-subtitle">Passionate about creating exceptional digital experiences</p>
-            </div>
+            <h2 class="section-title">Passionate about creating exceptional digital experiences</h2>
             <div class="about-content">
                 <div class="about-text">
+                    <h3>Full Stack Developer</h3>
                     <p>I'm a passionate Full Stack Developer with a love for creating innovative web solutions. I enjoy working with modern technologies and solving complex problems through clean, efficient code.</p>
+                    
                     <p>I specialize in full-stack development with experience in both frontend and backend technologies. I'm always eager to learn new technologies and take on challenging projects.</p>
+                    
                     <p>When I'm not coding, you can find me exploring new tech trends, contributing to open-source projects, or enjoying outdoor activities.</p>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <h4>3+</h4>
+                            <p>Years Experience</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>20+</h4>
+                            <p>Projects Completed</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>15+</h4>
+                            <p>Technologies</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="about-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">50+</div>
-                        <div class="stat-label">Projects Completed</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">3+</div>
-                        <div class="stat-label">Years Experience</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Client Satisfaction</div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <div class="floating-shapes">
+                            <div class="shape shape-1"></div>
+                            <div class="shape shape-2"></div>
+                            <div class="shape shape-3"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="section section-dark">
+    <section id="skills" class="skills">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Skills & Technologies</h2>
-                <p class="section-subtitle">The tools and technologies I work with</p>
-            </div>
+            <h2 class="section-title">The tools and technologies I work with</h2>
             <div class="skills-grid">
-                <div class="skill-category">
-                    <h3 class="category-title">Frontend</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <div class="skill-icon">⚛️</div>
-                            <span>React</span>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-icon">🎨</div>
-                            <span>CSS/SCSS</span>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-icon">📱</div>
-                            <span>JavaScript</span>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-icon">🖼️</div>
-                            <span>HTML5</span>
-                        </div>
-                    </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🌐</div>
+                    <h3>Frontend Development</h3>
+                    <ul>
+                        <li>HTML5 & CSS3</li>
+                        <li>JavaScript (ES6+)</li>
+                        <li>React.js</li>
+                        <li>Vue.js</li>
+                        <li>Responsive Design</li>
+                        <li>CSS Frameworks</li>
+                    </ul>
                 </div>
-                <div class="skill-category">
-                    <h3 class="category-title">Backend</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <div class="skill-icon">🟢</div>
-                            <span>Node.js</span>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-icon">🐍</div>
-                            <span>Python</span>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-icon">🗄️</div>
-                            <span>MongoDB</span>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-icon">🐘</div>
-                            <span>PostgreSQL</span>
-                        </div>
-                    </div>
+                <div class="skill-card">
+                    <div class="skill-icon">⚙️</div>
+                    <h3>Backend Development</h3>
+                    <ul>
+                        <li>Node.js</li>
+                        <li>Python</li>
+                        <li>Express.js</li>
+                        <li>RESTful APIs</li>
+                        <li>Database Design</li>
+                        <li>Server Management</li>
+                    </ul>
                 </div>
-                <div class="skill-category">
-                    <h3 class="category-title">Tools</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <div class="skill-icon">📦</div>
-                            <span>Docker</span>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-icon">🌿</div>
-                            <span>Git</span>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-icon">☁️</div>
-                            <span>AWS</span>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-icon">🔧</div>
-                            <span>VS Code</span>
-                        </div>
-                    </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🛠️</div>
+                    <h3>Tools & Technologies</h3>
+                    <ul>
+                        <li>Git & GitHub</li>
+                        <li>MongoDB</li>
+                        <li>MySQL</li>
+                        <li>Docker</li>
+                        <li>AWS Services</li>
+                        <li>Agile Methodology</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🎨</div>
+                    <h3>Design & UX</h3>
+                    <ul>
+                        <li>UI/UX Design</li>
+                        <li>Figma</li>
+                        <li>Adobe Creative Suite</li>
+                        <li>Prototyping</li>
+                        <li>User Research</li>
+                        <li>Design Systems</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="section">
+    <section id="projects" class="projects">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Featured Projects</h2>
-                <p class="section-subtitle">Some of my recent work</p>
-            </div>
+            <h2 class="section-title">Some of my recent work</h2>
             <div class="projects-grid">
                 <div class="project-card">
                     <div class="project-image">
-                        <div class="project-placeholder">🚀</div>
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                <a href="#" class="project-link">🔗 Live Demo</a>
+                                <a href="#" class="project-link">💻 View Code</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">E-Commerce Platform</h3>
-                        <p class="project-description">A full-stack e-commerce solution built with React, Node.js, and MongoDB. Features include user authentication, payment processing, and admin dashboard.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">Node.js</span>
-                            <span class="tech-tag">MongoDB</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">Live Demo</a>
-                            <a href="#" class="project-link">GitHub</a>
+                        <h3>E-Commerce Platform</h3>
+                        <p>A full-featured e-commerce platform with user authentication, payment integration, and admin dashboard.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">Stripe</span>
                         </div>
                     </div>
                 </div>
                 <div class="project-card">
                     <div class="project-image">
-                        <div class="project-placeholder">📱</div>
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                <a href="#" class="project-link">🔗 Live Demo</a>
+                                <a href="#" class="project-link">💻 View Code</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">Task Management App</h3>
-                        <p class="project-description">A collaborative task management application with real-time updates, drag-and-drop functionality, and team collaboration features.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">Socket.io</span>
-                            <span class="tech-tag">Express</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">Live Demo</a>
-                            <a href="#" class="project-link">GitHub</a>
+                        <h3>Task Management App</h3>
+                        <p>A collaborative task management application with real-time updates and team collaboration features.</p>
+                        <div class="project-tags">
+                            <span class="tag">Vue.js</span>
+                            <span class="tag">Express</span>
+                            <span class="tag">Socket.io</span>
+                            <span class="tag">PostgreSQL</span>
                         </div>
                     </div>
                 </div>
                 <div class="project-card">
                     <div class="project-image">
-                        <div class="project-placeholder">🤖</div>
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                <a href="#" class="project-link">🔗 Live Demo</a>
+                                <a href="#" class="project-link">💻 View Code</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">AI Chat Assistant</h3>
-                        <p class="project-description">An intelligent chatbot built with Python and machine learning that can answer questions and provide customer support.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">TensorFlow</span>
-                            <span class="tech-tag">Flask</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">Live Demo</a>
-                            <a href="#" class="project-link">GitHub</a>
+                        <h3>Weather Dashboard</h3>
+                        <p>A responsive weather dashboard with location-based forecasts and interactive data visualizations.</p>
+                        <div class="project-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">Chart.js</span>
+                            <span class="tag">API Integration</span>
+                            <span class="tag">CSS Grid</span>
                         </div>
                     </div>
                 </div>
@@ -227,87 +232,70 @@
         </div>
     </section>
 
-    <!-- Experience Section (Terminal) -->
-    <section id="experience" class="section section-terminal">
+    <section class="terminal-section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Work Experience</h2>
-                <p class="section-subtitle">Explore my professional journey through the terminal</p>
-            </div>
-            <div class="terminal-container">
+            <h2 class="section-title">Explore my professional journey through the terminal</h2>
+            <div class="terminal">
                 <div class="terminal-header">
                     <div class="terminal-controls">
-                        <span class="control close"></span>
-                        <span class="control minimize"></span>
-                        <span class="control maximize"></span>
+                        <div class="terminal-button red"></div>
+                        <div class="terminal-button yellow"></div>
+                        <div class="terminal-button green"></div>
                     </div>
-                    <div class="terminal-title">experience@portfolio:~</div>
+                    <div class="terminal-title">ketaki@portfolio:~</div>
                 </div>
-                <div class="terminal">
-                    <div id="terminal-output" class="output"></div>
-                    <div class="input-line">
-                        <span class="prompt">visitor@experience:~$</span>
-                        <input type="text" id="terminal-input" autocomplete="off" placeholder="Type 'help' to start">
-                        <span class="cursor" id="cursor">_</span>
+                <div class="terminal-content" id="terminal-content">
+                    <div class="terminal-line">
+                        <span class="prompt">ketaki@portfolio:~$</span> 
+                        <span class="command typing-animation">cat about.txt</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="section section-dark">
+    <section id="contact" class="contact">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Let's Work Together</h2>
-                <p class="section-subtitle">Ready to bring your ideas to life</p>
-            </div>
             <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">📧</div>
-                        <div>
-                            <h4>Email</h4>
-                            <p>your.email@example.com</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">🐙</div>
-                        <div>
-                            <h4>GitHub</h4>
-                            <p>github.com/yourusername</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">💼</div>
-                        <div>
-                            <h4>LinkedIn</h4>
-                            <p>linkedin.com/in/yourprofile</p>
-                        </div>
-                    </div>
+                <h2 class="section-title">Ready to bring your ideas to life?</h2>
+                <p class="contact-description">Let's collaborate and create something amazing together. I'm always excited to work on new projects and challenges.</p>
+                <div class="contact-links">
+                    <a href="mailto:kshintre95@gmail.com" class="contact-link">
+                        <span class="contact-icon">📧</span>
+                        <span>kshintre95@gmail.com</span>
+                    </a>
+                    <a href="https://github.com/Ketaki09" class="contact-link">
+                        <span class="contact-icon">🐙</span>
+                        <span>github.com/Ketaki09</span>
+                    </a>
+                    <a href="https://linkedin.com/in/ketakishintre95" class="contact-link">
+                        <span class="contact-icon">💼</span>
+                        <span>linkedin.com/in/ketakishintre95</span>
+                    </a>
                 </div>
+                
                 <div class="contact-form">
-                    <form>
+                    <h3>Send me a message</h3>
+                    <form id="contact-form">
                         <div class="form-group">
-                            <input type="text" placeholder="Your Name" required>
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
                         </div>
                         <div class="form-group">
-                            <input type="email" placeholder="Your Email" required>
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
                         </div>
                         <div class="form-group">
-                            <textarea placeholder="Your Message" rows="5" required></textarea>
+                            <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="submit" class="submit-btn">Send Message</button>
                     </form>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <footer>
         <div class="container">
-            <p>&copy; 2025 Your Name. All rights reserved.</p>
+            <p>&copy; 2024 Ketaki Shintre. Designed and developed with passion.</p>
         </div>
     </footer>
 
