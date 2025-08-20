@@ -67,6 +67,7 @@ nav {
     z-index: 1000;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--medium-gray);
+    transition: all 0.3s ease;
 }
 
 .nav-container {
@@ -986,17 +987,26 @@ footer p {
     transform: rotate(45deg) translate(-5px, -6px);
 }
 
-/* Utility Classes */
-.text-center {
-    text-align: center;
+/* Theme Toggle */
+.theme-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: var(--cyan);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 173, 181, 0.3);
+    z-index: 1000;
+    transition: all 0.3s ease;
 }
 
-.mb-2 {
-    margin-bottom: 2rem;
-}
-
-.mt-2 {
-    margin-top: 2rem;
+.theme-toggle:hover {
+    transform: scale(1.1);
 }
 
 /* Loading Animation */
@@ -1012,4 +1022,20 @@ footer p {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+/* Notification Styles */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.animate-in {
+    animation: fadeInUp 0.6s ease forwards;
 }
